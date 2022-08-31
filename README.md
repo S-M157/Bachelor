@@ -1,4 +1,4 @@
-Setup project with poetry:
+## Setup project with poetry
 
 *In project folder*
 
@@ -16,7 +16,7 @@ poetry shell
 poetry install
 ```
 
-Setup project with pip:
+## Setup project with pip
 
 *In project folder*
 
