@@ -17,7 +17,7 @@ def num(data):
     return data
 
 
-def preparation(data, cols):
+def preprocess_stats(data, cols):
     data.columns = data.iloc[1]
     data = data.drop(index=[0, 1])
 
@@ -28,13 +28,9 @@ def preparation(data, cols):
     data = data.drop(columns=['Database HRACT1(порог HR)'])
     data = data[data['availability ratio'] == 100]
     data = data[cols]
-
+    
+    data = data.dropna()
     data = num(data)
-
+    
     return data
-
-
-def preprocess_stats(stats, columns):
-    data = pd.read_excel(stats)
-    df = preparation(data, columns)
-    return df.dropna()
+ 
