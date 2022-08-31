@@ -25,10 +25,12 @@ Setup project with pip:
 python -m venv env
 ```
 2. Activate virtual environment:
+
 In Windows:
 ```
 env\Scripts\activate
 ```
+
 In Linux:
 ```
 source env/bin/activate
