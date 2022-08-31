@@ -3,7 +3,7 @@ Setup project with poetry:
 *In project folder*
 
 ---
-1. Install poetry
+1. Install poetry if not installed
 ```
 pip install poetry
 ```
