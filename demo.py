@@ -4,12 +4,12 @@ from helpers import predict, load_agent, bad_decision, clip
 from preprocess import preprocess_stats
 
 
-def optimize_params(path_to_stats: str) -> None:
+def optimize_params(data: pd.DataFrame) -> pd.DataFrame:
     """
     function for optimization lower and upper FR usage limit
 
-    :param path_to_stats:       path to excel file with stats
-    :return: result saves to the same path as input
+    :param data:        stats in pandas DataFrame 
+    :return:            result saves to the same path as input
     """
     columns = ['Cell ID', 'LAC', 'HR Usage Rate', 'TCH Blocking Rate, BH', 'Number of Available\nTCH',
                'TCH Traffic (Erl), BH', 'Lower_limit', 'Upper_limit']
@@ -32,9 +32,10 @@ def optimize_params(path_to_stats: str) -> None:
 
         lower_limits.append(lower)
         upper_limits.append(upper)
-    df['Lower_limit_Gen'], df['Upper_limit_Gen'] = pd.Series(lower_limits), pd.Series(upper_limits)
+        
+    df['Lower_limit_Gen'], df['Upper_limit_Gen'] = lower_limits, upper_limits
 
-    df.to_excel(path_to_stats.split('.')[0] + '_result.xlsx')
+    return df
 
 # how to use
 # optimize_params('data/GBTS_TOTAL_20220522.xlsm')
