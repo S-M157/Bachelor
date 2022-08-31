@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "bachelor-main"
+version = "0.1.0"
+description = "rl agent for optimization voice transmission quality in GSM network"
+authors = ["Your Name <you@example.com>"]
+license = "n"
+readme = "README.md"
+packages = [{include = "bachelor_main"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^1.4.4"
+torch = "^1.12.1"
+openpyxl = "^3.0.10"
+scipy = "^1.9.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
