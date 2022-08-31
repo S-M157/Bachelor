@@ -1,5 +1,7 @@
 Setup project with poetry:
+
 *In project folder*
+
 ---
 1. Install poetry
 ```
@@ -15,7 +17,9 @@ poetry install
 ```
 
 Setup project with pip:
+
 *In project folder*
+
 1. Create virtual environment:
 ```
 python -m venv env
