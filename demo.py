@@ -14,7 +14,7 @@ def optimize_params(data: pd.DataFrame) -> pd.DataFrame:
     columns = ['Cell ID', 'LAC', 'HR Usage Rate', 'TCH Blocking Rate, BH', 'Number of Available\nTCH',
                'TCH Traffic (Erl), BH', 'Lower_limit', 'Upper_limit']
 
-    df = preprocess_stats(path_to_stats, columns)
+    df = preprocess_stats(data, columns)
     obs_array = df.drop(columns=['Cell ID', 'LAC']).values
 
     agent = load_agent('sac_last_60_50d_exp-r.pt', 'pt')
@@ -38,4 +38,6 @@ def optimize_params(data: pd.DataFrame) -> pd.DataFrame:
     return df
 
 # how to use
-# optimize_params('data/GBTS_TOTAL_20220522.xlsm')
+df = optimize_params(pd.read_excel('data/GBTS_TOTAL_20220522.xlsm'))
+
+df.to_excel('results.xlsm')
