@@ -8,6 +8,7 @@ import time
 import rl.sac_core as core
 from rl.utils.logx import EpochLogger
 import pickle
+from tqdm import tqdm
 
 
 class ReplayBuffer:
@@ -117,7 +118,9 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
         save_freq (int): How often (in terms of gap between epochs) to save
             the current policy and value function.
     """
-
+    # if torch.cuda.is_available():
+    #     device = torch.device("cuda")
+    # device = "cpu"
     logger = EpochLogger(**logger_kwargs)
     logger.save_config(locals())
 
@@ -132,9 +135,9 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
 
     # Create actor-critic module and target networks
     ac_targ = deepcopy(ac)
+    ac_targ
     train_before = -999
     best_reward = 0
-    actions, rewards = [], []
     # Freeze target networks with respect to optimizers (only update via polyak averaging)
     for p in ac_targ.parameters():
         p.requires_grad = False
@@ -151,6 +154,8 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
 
     # Set up function for computing SAC Q-losses
     def compute_loss_q(data):
+        # o, a, r, o2, d = data['obs'].to(device), data['act'].to(device), data['rew'], data['obs2'].to(device), data[
+        #     'done']
         o, a, r, o2, d = data['obs'], data['act'], data['rew'], data['obs2'], data['done']
 
         q1 = ac.q1(o, a)
@@ -257,7 +262,7 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
     o, ep_ret, ep_len = env.reset(), 0, 0
 
     # Main loop: collect experience in env and update/log each epoch
-    for t in range(total_steps):
+    for t in tqdm(range(total_steps)):
 
         # Until start_steps have elapsed, randomly sample actions
         # from a uniform distribution for better exploration. Afterwards,
@@ -266,7 +271,6 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
             a = get_action(o)
         else:
             a = env.action_space.sample()
-        actions.append(a)
         # Step the env
         o2, r, d, _ = env.step(a)
         ep_ret += r
@@ -305,7 +309,7 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
 
             # Test the performance of the deterministic version of the agent.
             test_agent()
-            if epoch == epochs/2:
+            if epoch == epochs / 2:
                 alpha = 0.2
             reward_train, reward_test = logger.get_stats('EpRet')[0], logger.get_stats('TestEpRet')[0]
 
@@ -313,7 +317,6 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
                 torch.save(ac, f"agent/sac_best{save_name}.pt")
                 best_reward = reward_test
             train_before = reward_train
-            rewards.append((reward_train, reward_test))
             # Log info about epoch
             logger.log_tabular('Epoch', epoch)
             logger.log_tabular('EpRet', with_min_and_max=True)
@@ -330,4 +333,4 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
             logger.dump_tabular()
 
     torch.save(ac, f"agent/sac_last{save_name}.pt")
-    return actions, rewards
+    return logger
