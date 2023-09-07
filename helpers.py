@@ -38,12 +38,12 @@ def bad_decision(blocking, channels, traffic, param1, param2, prparam1, prparam2
     return res
 
 
-def load_agent(name, ext):
+def load_agent(name, ext, folder: str = 'agent'):
     if ext == 'pt':
-        agent = torch.load(f'agent/{name}')
+        agent = torch.load(f'{folder}/{name}')
         agent.eval()
     else:
-        with open(f'agent/{name}', 'rb') as f:
+        with open(f'{folder}/{name}', 'rb') as f:
             agent = pickle.load(f)
     return agent
 
