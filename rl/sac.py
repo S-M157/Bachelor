@@ -135,7 +135,6 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
 
     # Create actor-critic module and target networks
     ac_targ = deepcopy(ac)
-    ac_targ
     train_before = -999
     best_reward = 0
     # Freeze target networks with respect to optimizers (only update via polyak averaging)
@@ -260,22 +259,21 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
     total_steps = steps_per_epoch * epochs
     start_time = time.time()
     o, ep_ret, ep_len = env.reset(), 0, 0
-
+    actions = []
     # Main loop: collect experience in env and update/log each epoch
-    for t in tqdm(range(total_steps)):
-
+    for t in range(total_steps):
         # Until start_steps have elapsed, randomly sample actions
         # from a uniform distribution for better exploration. Afterwards,
         # use the learned policy.
         if t > start_steps:
             a = get_action(o)
+            actions.append(a)
         else:
             a = env.action_space.sample()
         # Step the env
         o2, r, d, _ = env.step(a)
         ep_ret += r
         ep_len += 1
-
         # Ignore the "done" signal if it comes from hitting the time
         # horizon (that is, when it's an artificial terminal signal
         # that isn't based on the agent's state)
@@ -333,4 +331,4 @@ def sac(env, test_env, ac, save_name, ac_kwargs=dict(), seed=0,
             logger.dump_tabular()
 
     torch.save(ac, f"agent/sac_last{save_name}.pt")
-    return logger
+    return actions

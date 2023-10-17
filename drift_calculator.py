@@ -58,7 +58,7 @@ class DriftCalculator:
 
             if weighted:
                 drift_score = 0
-                for column, status in drift_statuses:
+                for column, status in drift_statuses.items():
                     drift_score += int(status) * self.fi[column]
                 drift_score /= sum(self.fi.values())
 
