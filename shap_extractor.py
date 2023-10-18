@@ -10,7 +10,6 @@ from typing import List, Type, Dict, Any, Callable, Tuple
 
 import numpy as np
 import pandas as pd
-import torch
 
 from matplotlib import pyplot as plt
 
